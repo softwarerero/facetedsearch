@@ -15,20 +15,20 @@ var defaults = {
   facetTitleTemplate : '<h3 class=facettitle><%= title %></h3>',
   facetListContainer : '<div class=facetlist></div>',
   listItemTemplate   : '<div class=facetitem id="<%= id %>"><%= name %> <span class=facetitemcount>(<%= count %>)</span></div>',
-  bottomContainer    : '<div class=bottomline></div>',
-  orderByTemplate    : '<div class=orderby><span class="orderby-title">Sort by: </span><ul><% _.each(options, function(value, key) { %>'+
+  bottomContainer    : '<div class=bottomline highlight></div>',
+  orderByTemplate    : '<span class=orderby><span class="orderby-title">Sort by: </span><ul><% _.each(options, function(value, key) { %>'+
                        '<li class=orderbyitem id=orderby_<%= key %>>'+
-                       '<%= value %> </li> <% }); %></ul></div>',
-  countTemplate      : '<div class=facettotalcount><%= count %> Results</div>',
-  deselectTemplate   : '<div class=deselectstartover>Deselect all filters</div>',
+                       '<%= value %> </li> <% }); %></ul></span>',
+  countTemplate      : '<span class=facettotalcount><%= count %> Resultados</span>',
+  deselectTemplate   : '<span class=deselectstartover><button class="btn btn-large btn-primary" type="button">Iniciar Filtros</button></span>',
   resultTemplate     : '<div class=facetresultbox><%= name %></div>',
-  noResults          : '<div class=results>Sorry, but no items match these criteria</div>',
+  noResults          : '<div class=results>Sorry, nada encontrado</div>',
   orderByOptions     : {'a': 'by A', 'b': 'by B', 'RANDOM': 'by random'},
   state              : {
                          orderBy : false,
                          filters : {}
                        },
-  showMoreTemplate   : '<a id=showmorebutton>Show more</a>',
+  showMoreTemplate   : '<a id=showmorebutton>Más</a>',
   enablePagination   : true,
   paginationCount    : 20
 }
@@ -62,6 +62,8 @@ jQuery.facetUpdate = function() {
   updateFacetUI();
   updateResults();
 }
+
+//jQuery.facetSettings = settings;
 
 /**
  * The following section contains the logic of the faceted search
@@ -134,6 +136,19 @@ function filter() {
         }
       }
     });
+    if(settings.textFilter) {
+    	var filterValue = $(settings.textFilter).val().toLowerCase();
+	    var atListOneTextOccurenceFound = false;
+	    _.each(item, function(value, key) {
+	    	//alert(value);
+	    	if(value.toString().toLowerCase().indexOf(filterValue) != -1) {
+	    		atListOneTextOccurenceFound = true;
+	    	}
+	    });
+	    if(!atListOneTextOccurenceFound) {
+	    	filtersApply = false;
+	    }
+    }
     return filtersApply;
   });
   // Update the count for each facet and item:
@@ -160,6 +175,7 @@ function filter() {
     });
   });
   settings.state.shownResults = 0;
+  settings.callbackResultUpdate(settings.currentResults);
 }
 
 /**
@@ -229,8 +245,9 @@ function createFacetUI() {
     $(settings.facetSelector).append(facetHtml);
   });
   // add the click event handler to each facet item:
-  $('.facetitem').click(function(event){
-    var filter = getFilterById(this.id);
+  $('.facetlist').change(function(event){
+    var id = $(this).children(":selected").attr("id");
+    var filter = getFilterById(id);
     toggleFilter(filter.facetname, filter.filtername);
     $(settings.facetSelector).trigger("facetedsearchfacetclick", filter);
     order();
@@ -264,6 +281,7 @@ function createFacetUI() {
   // Append deselect filters button
   var deselect = $(settings.deselectTemplate).click(function(event){
     settings.state.filters = {};
+    $(settings.textFilter).val("");
     jQuery.facetUpdate();
   });
   $(bottom).append(deselect);
