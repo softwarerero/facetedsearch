@@ -1,0 +1,14 @@
+@media all and (min-width:530px){body{font-size:13px;color:#444;line-height:1.2;} html,body{height:100%;} #wrap{min-height:100%;height:auto !important;height:100%;margin:0 auto -35px;padding:0 0 35px;} #footer{height:30px;vertical-align:bottom;} #footer div{padding:5px 25px;} .content{padding:25px 25px 0px 25px;}}.facetsearch{display:inline-block;margin-right:10px;}
+.facettotalcount,#filter1Lable,#filter1{margin-right:10px;}
+.bottomline{margin-top:5px;}
+.orderby{display:none;}
+.orderbyitem,.deselectstartover{color:#428BCA;}
+#salarioAnhos{margin-bottom:20px;}
+.highlight{background-color:#F9F9F9;border:1px solid #E1E1E8;border-radius:4px 4px 4px 4px;margin-bottom:14px;padding:9px 14px;}
+h1,h2,h3,h4,h5,h6,h7{color:#428BCA;}
+.pageTitle{text-align:center;margin-bottom:25px;}
+table{font-size:0.83em;}
+#chartLabel{position:relative;top:35px;}
+pre{line-height:1.0;}
+.jumbotron{min-height:400px;}
+.jumbotron h1{color:#428BCA;line-height:1;font-size:2.2em;margin-top:0px;}
